@@ -15,6 +15,7 @@ public class Toys_store {
     private List<Toy> prize_toys;
 
 
+
     PriorityQueue queue = new PriorityQueue(Comparator.comparingInt(Toy::getWeight));
 
     public Toys_store() {
@@ -41,39 +42,46 @@ public class Toys_store {
     }
 
 
-    private void get_prize(){
-        for (Toy toy : prize_toys){
-            String output = String.format("%d, %s, %d", toy.getId(), toy.getName(), toy.getWeight());
-            try(BufferedWriter writer = new BufferedWriter(new FileWriter("output.txt", true))){
-                writer.write(output);
-                writer.newLine();
-            } catch (IOException e){
-                e.printStackTrace();
+    public int get_toys_Id(Toy toy){
+        int current_id = 0;
+        for(int i = 0; i<toys_store.size();i++){
+            if(toy == toys_store.get(i)){
+                current_id = i;
+                break;
             }
         }
+        return current_id-1;
     }
 
     public boolean prize_draw(){
         sorted_toy();
         for(int i=0; i<10;i++){
-            System.out.println("Flag-1 " + i);
             int random_number = 1 + (int)(Math.random()*100);
-            System.out.println("rand = " + random_number);
             for (Toy toy : toys_store){
-            if(random_number<toy.getWeight()*10){
-                prize_toys.add(toy);
-                System.out.println("Flag-2 " + i);
-                System.out.println(toy.getName());
-                break;
-                } else if (toy == toys_store.get(toys_store.size() - 1)){
-                prize_toys.add(toys_store.get(toys_store.size() - 1));
-                System.out.println("Flag-3 " + i);
-                System.out.println(toy.getName());
-                break;
-            }
+                if(toy!=toys_store.get(0) && toy!=toys_store.get(toys_store.size()-1)){
+                    if(toy.getWeight()!=toys_store.get(get_toys_Id(toy)).getWeight()){
+                        if(random_number<toy.getWeight()*10) {
+                            prize_toys.add(toy);
+                            break;
+                        }
+                    } else {
+                        if(random_number<(toy.getWeight()+toys_store.get(get_toys_Id(toy)).getWeight())*10){
+                            prize_toys.add(toy);
+                            break;
+                        }
+                    }
+                } else {
+                    if(random_number<toy.getWeight()*10){
+                        prize_toys.add(toy);
+                        break;
+                    } else if (toy == toys_store.get(toys_store.size() - 1)){
+                        prize_toys.add(toys_store.get(toys_store.size() - 1));
+                        break;
+                    }
+                }
             }
         }
-        get_prize();
+        get_to_file.get_prize(prize_toys);
         return true;
     }
 }
