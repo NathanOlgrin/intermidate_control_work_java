@@ -1,9 +1,5 @@
 package model;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -81,7 +77,7 @@ public class Toys_store {
                 }
             }
         }
-        get_to_file.get_prize(prize_toys);
+        Get_to_file.get_prize(prize_toys);
         return true;
     }
 }
